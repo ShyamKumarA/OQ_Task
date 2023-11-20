@@ -24,7 +24,10 @@ const registerUser=asyncHandler(async(req,res)=>{
     const {email,name,workshop,mobile}=req.body;
     const workshopData=await Workshop.findOne({name:workshop})
     const count=workshopData.count;
+    const location=workshopData.location;
     const findUser=await User.findOne({email:email});
+    // const time=findUser.timestamp;
+    // console.log(time);
     const findMobile = await User.findOne({mobile:mobile})
     if(count>0){
         if(!findUser && !findMobile){
@@ -35,7 +38,7 @@ const registerUser=asyncHandler(async(req,res)=>{
             { name: workshop },
             { $inc: { count: -1 } }
           );
-           sendMail(email,name,workshop)
+           sendMail(email,name,workshop,location)
            res.send({newUser, message:"user added successfully" , success: true})
      
    }else{
@@ -53,7 +56,7 @@ const registerUser=asyncHandler(async(req,res)=>{
     
 })
 
-const sendMail=(email,name,workshop)=>{
+const sendMail=(email,name,workshop,location,time)=>{
     const transporter=nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 587,
@@ -69,7 +72,16 @@ const sendMail=(email,name,workshop)=>{
         to: email,
         subject: 'Registration Confirmation',
         text: `Hi ${name},
-        Thank you for registering for ${workshop}.`,
+        Thank you for registering for ${workshop}!
+
+Registration Time: 
+Workshop Location: Your Workshop Location Here ${location}
+
+We look forward to seeing you at the workshop! If you have any questions, feel free to contact us.
+
+Best regards,
+Team OQ
+`,
       };
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {

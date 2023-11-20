@@ -3,7 +3,7 @@ import axios from "axios"
 import toast from 'react-hot-toast'
 
 function Register() {
-  let [workshopData,setWorkshopData] = useState()
+  let [workshopData,setWorkshopData] = useState([])
 
 
   let [name,setName] = useState("")
@@ -13,18 +13,24 @@ function Register() {
   let [workshop,setWorkshop] = useState("")
 
   useEffect(()=>{
-    const response = axios.get("http://localhost:4000/getCount",{})
+    
+  getCount()
+  })
+
+  const getCount=()=>{
+    const response = axios.get("http://localhost:8080/getCount",{})
 
     response.then((data)=>{
 
       setWorkshopData(data.data.data)
+      console.log(workshopData);
     }).catch((err)=>console.log(err))
+  }
 
-  },[])
 
   let sendData = () => {
     try {
-      let response = axios.post("http://localhost:4000/register",{
+      let response = axios.post("http://localhost:8080/register",{
         name,mobile,email,companyName:company,workshop
       })
 
@@ -33,6 +39,12 @@ function Register() {
       response.then((data)=>{
         if(data.data.success){
           toast.success("done")
+          setName("")
+          setMobile("")
+          setEmail("")
+          setCompany("")
+          setWorkshop("")
+          getCount()
         }else{
           toast.error(data.data.message) 
         }
@@ -52,11 +64,11 @@ function Register() {
     <div className='register_container'>
         <h1>Register to Attend</h1>
         <div style={{width:"80%"}}>
-        <input class="inp" placeholder="Full Name" size={"50"} onChange={e=>setName(e.target.value)} />
-        <input class="inp" placeholder="Mobile" onChange={e=>setMobile(e.target.value)}/>
-        <input class="inp" placeholder="Email" onChange={e=>setEmail(e.target.value)}/>
-        <input class="inp" placeholder="Company Name" onChange={e=>setCompany(e.target.value)}/>
-        <select class="inp" style={{width:"260px" }} onChange={e=>setWorkshop(e.target.value)}>
+        <input class="inp" placeholder="Full Name" value={name} size={"50"} onChange={e=>setName(e.target.value)} />
+        <input class="inp" placeholder="Mobile" value={mobile} onChange={e=>setMobile(e.target.value)}/>
+        <input class="inp" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)}/>
+        <input class="inp" placeholder="Company Name" value={company} onChange={e=>setCompany(e.target.value)}/>
+        <select class="inp" style={{width:"260px" }} value={workshop} onChange={e=>setWorkshop(e.target.value)}>
   <option value="" disabled selected hidden>Select Workshop</option>
   {workshopData?.map((value)=>{
   if(value.count > 0){
