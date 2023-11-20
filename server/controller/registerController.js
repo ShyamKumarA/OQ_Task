@@ -26,8 +26,7 @@ const registerUser=asyncHandler(async(req,res)=>{
     const count=workshopData.count;
     const location=workshopData.location;
     const findUser=await User.findOne({email:email});
-    // const time=findUser.timestamp;
-    // console.log(time);
+        
     const findMobile = await User.findOne({mobile:mobile})
     if(count>0){
         if(!findUser && !findMobile){
@@ -38,7 +37,10 @@ const registerUser=asyncHandler(async(req,res)=>{
             { name: workshop },
             { $inc: { count: -1 } }
           );
-           sendMail(email,name,workshop,location)
+          // const user=await User.findOne({email:email})
+          const time = new Date(newUser.timestamp);
+          // console.log(newUser);
+           sendMail(email,name,workshop,location,time)
            res.send({newUser, message:"user added successfully" , success: true})
      
    }else{
@@ -74,7 +76,7 @@ const sendMail=(email,name,workshop,location,time)=>{
         text: `Hi ${name},
         Thank you for registering for ${workshop}!
 
-Registration Time: 
+Registration Time: ${time}
 Workshop Location: Your Workshop Location Here ${location}
 
 We look forward to seeing you at the workshop! If you have any questions, feel free to contact us.
