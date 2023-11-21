@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios"
 import toast from 'react-hot-toast'
+import validator from 'validator';
 
 function Register() {
   let [workshopData,setWorkshopData] = useState([])
@@ -12,24 +13,42 @@ function Register() {
   let [company,setCompany] = useState("")
   let [workshop,setWorkshop] = useState("")
 
-  useEffect(()=>{
-    
-  getCount()
-  })
 
-  const getCount=()=>{
-    const response = axios.get("http://localhost:8080/getCount",{})
-
-    response.then((data)=>{
-
+  const getCount=async()=>{
+    await axios.get("http://localhost:8080/getCount",{})
+    .then((data)=>{
+      console.log(data);
       setWorkshopData(data.data.data)
+      console.log('=====================');
+
       console.log(workshopData);
+    console.log('=====================');
     }).catch((err)=>console.log(err))
+    
+
+    // response.
   }
+
+  
+
+  
 
 
   let sendData = () => {
     try {
+      // Basic form validation
+      if (!name || !mobile || !email || !company || !workshop) {
+        toast.error('Please fill in all fields');
+        return;
+      }
+
+      // Email validation
+      if (!validator.isEmail(email)) {
+        toast.error('Please enter a valid email address');
+        return;
+      }
+
+
       let response = axios.post("http://localhost:8080/register",{
         name,mobile,email,companyName:company,workshop
       })
@@ -38,7 +57,7 @@ function Register() {
 
       response.then((data)=>{
         if(data.data.success){
-          toast.success("done")
+          toast.success("Registration Successful!")
           setName("")
           setMobile("")
           setEmail("")
@@ -56,8 +75,21 @@ function Register() {
       console.log(error);
     }
   }
+  useEffect(()=>{
+    
+    getCount()
+    },[])
 
-
+    // useEffect(() => {
+    //   // Calculate the sum of all counts
+    //   const totalAvailableSeats = workshopData.reduce((sum, value) => sum + value.count, 0);
+    
+    //   // Check if the total available seats are zero
+    //   if (totalAvailableSeats === 0) {
+    //     // Display a notification indicating that all seats have been filled
+    //     toast.error("All seats have been filled. Further registrations are not permitted.");
+    //   }
+    // }, [workshopData]);
 
 
   return (
