@@ -1,13 +1,13 @@
-import './App.css';
-import Home from './Components/Home';
-import {Toaster} from "react-hot-toast"
+import "./App.css";
+import Home from "./Components/Home";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <>
-    <Toaster/>
-   <Home/>
-   </>
+      <Toaster />
+      <Home />
+    </>
   );
 }
 

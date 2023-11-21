@@ -1,13 +1,12 @@
-import React from 'react'
-import ProfileCard from './ProfileCard'
+import React from "react";
+import ProfileCard from "./ProfileCard";
 
-function FloatWindow({functio ,data}) {
+function FloatWindow({ functio, data }) {
   return (
-    <div className='float_container'>
-        
-<ProfileCard data= {data} functio={functio}/>
+    <div className="float_container">
+      <ProfileCard data={data} functio={functio} />
     </div>
-  )
+  );
 }
 
-export default FloatWindow
+export default FloatWindow;
