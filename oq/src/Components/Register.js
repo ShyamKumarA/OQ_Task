@@ -137,32 +137,28 @@ function Register() {
                 </option>
               ))}
             </select>
-            <div
+            <div style={{display: "flex" , justifyContent: "center" , alignItems: "center" , marginTop:"10px"}}>
+            <button
+              onClick={() => sendData()}
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: "15px",
+                padding: "8px 42px",
+                borderRadius: "29px",
+                border: "none",
+                backgroundColor: "#FF8200",
+                color: "white",
               }}
             >
-              <button
-                onClick={() => sendData()}
-                style={{
-                  padding: "8px 42px",
-                  borderRadius: "29px",
-                  border: "none",
-                  backgroundColor: "#FF8200",
-                  color: "white",
-                }}
-              >
-                Submit
-              </button>
+              Submit
+            </button>
             </div>
           </div>
         </div>
       )}
     </>
   );
+  
+
+  
 }
 
 export default Register;
